@@ -104,3 +104,12 @@ def addUserProfile(request):
 
 def homePage(request):
     return render(request, "buddies/index.html", {})
+
+
+def aClass():
+    temp = null
+    a = [1, 2,34, 5, 6]
+
+    for (i in a):
+        print (i)
+    print ("done")    
