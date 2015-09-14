@@ -3,14 +3,14 @@ from django.utils import timezone
 
 # Create your models here.
 class UserProfile(models.Model):
-    profileTitle = models.TextField()
-    location = models.TextField()
+    profileTitle = models.CharField(max_length=202, blank=True)
+    location = models.CharField(max_length=202, blank=True)
     description = models.TextField()
-    token = models.TextField()
-    username = models.TextField()
+    token = models.CharField(max_length=220, blank=True)
+    username = models.CharField(max_length=220, blank=True)
     displayName = models.CharField(max_length=200)
-    first_name = models.TextField()
-    last_name = models.TextField()
+    first_name = models.CharField(max_length=220, blank=True)
+    last_name = models.CharField(max_length=220, blank=True)
     password = models.CharField(max_length=20, blank=True)
 
     def __str__(self):  
@@ -18,3 +18,5 @@ class UserProfile(models.Model):
 
     def saveProfile(self):
         self.save()
+
+#Before committing, please call Ryan

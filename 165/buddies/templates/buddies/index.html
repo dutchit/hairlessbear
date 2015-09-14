@@ -5,12 +5,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 <body>
-<form method="POST"></form>
-<button onclick="test()">Add User Profile</button>
+<form method="POST">Calling addUserProfile()</form>
+<button onclick="addUserProfile()">Add User Profile</button>
 <form method="POST"></form>
 <button onclick="addUser()">Register User</button>
 <script type="text/javascript">
-    function test(){
+    function addUserProfile(){
         someData = {
             "profileTitle": "Testing another form!",
             "username": "admin"
@@ -35,7 +35,7 @@
     }
 
     function addUser(){
-        some_data = {'username': 'rhonrado', 'password': 'aaaaaa', 'displayName': 'Ryan Honrado'}
+        some_data = {'username': 'marvin', 'password': 'aaaaaa', 'displayName': 'Marvin Ramos'}
         console.log("Test Adding User");
         $.ajax({
             url: 'appAdmin/',

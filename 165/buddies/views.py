@@ -32,7 +32,7 @@ def addUser(request):
 
     if form.is_valid():
         try:
-            form.save()  
+            form.save()
         except:
             print("Registration Form not Saved")
 
@@ -103,13 +103,4 @@ def addUserProfile(request):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def homePage(request):
-    return render(request, "buddies/index.html", {})
-
-
-def aClass():
-    temp = null
-    a = [1, 2,34, 5, 6]
-
-    for (i in a):
-        print (i)
-    print ("done")    
+    return render(request, "buddies/index.html", {}) 
