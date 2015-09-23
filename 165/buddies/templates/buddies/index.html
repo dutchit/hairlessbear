@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buddies</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+<form method="POST">Calling addUserProfile()</form>
+<button onclick="addUserProfile()">Add User Profile</button>
+<form method="POST"></form>
+<button onclick="addUser()">Register User</button>
+<script type="text/javascript">
+    function addUserProfile(){
+        someData = {
+            "profileTitle": "Testing another form!",
+            "username": "admin"
+        }
+        console.log("Test Call");
+        $.ajax({
+            url: 'userAdmin/',
+            type: 'POST',
+            dataType:'json',
+            data: someData,
+        })
+        .done(function(res) {
+            window.alert(JSON.stringify(res));
+            console.log("success");
+        })
+        .fail(function(res) {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+    }
+
+    function addUser(){
+        some_data = {'username': 'marvin', 'password': 'aaaaaa', 'displayName': 'Marvin Ramos'}
+        console.log("Test Adding User");
+        $.ajax({
+            url: 'appAdmin/',
+            type: 'POST',
+            dataType:'json',
+            data: some_data,
+        })
+
+        .done(function(res) {
+            window.alert(JSON.stringify(res));
+            console.log("success");
+        })
+        .fail(function(res) {
+            if (res.status == 400){
+                window.alert("User already exists.")
+            }
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+    }
+</script>
+</body>
+</html>
