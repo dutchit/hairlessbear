@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -31,12 +32,12 @@ class Jobs(models.Model):
     title = models.CharField(max_length=200, blank=True)
     description = models.TextField(blank=True)
     location = models.CharField(max_length=200, blank=True)
-    date = models.DateField(blank=True)
-    duration = models.IntegerField(blank=True)
+    date = models.DateField(default=date.today, blank=True)
+    duration = models.IntegerField(blank=True, default=0)
     timeUnit = models.CharField(max_length=200, blank=True)
     price = models.CharField(max_length=5, blank=True)
-    lowerBound = models.IntegerField(blank=True)
-    upperBound = models.IntegerField(blank=True)
+    lowerBound = models.IntegerField(blank=True, default=0)
+    upperBound = models.IntegerField(blank=True, default=0)
 
     def __str__(self):
         return "Jobs by: " + self.username.username
