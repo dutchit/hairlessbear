@@ -1,5 +1,5 @@
 
-1. Install your local environment next to the lyfer folder (i.e. make your env folder a sibling of lyfer folder)
+1. Install your local environment next to the lyfers folder (i.e. make your env folder a sibling of lyfers folder)
 2. Below are the commands to run
    (WINDOWS)
    - python -m venv env (CREATES environment folder)
