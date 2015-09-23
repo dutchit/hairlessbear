@@ -7,3 +7,4 @@
    - pip easy_install
    - pip install django==1.8.4
    - pip install djangorestframework
+   - pip install django-cors-headers
