@@ -24,6 +24,7 @@ def userprofile_list(request, format=None):
     """
     user = None
     userprofile = None
+    print ("UserProfile_list is called.")
 
     if request.method == 'GET':
         userprofile = UserProfile.objects.all()
@@ -31,12 +32,13 @@ def userprofile_list(request, format=None):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        print ("Data: " + str(request.data))
-        try:
-            #Getting username from POST request (request.POST.get("username"))
-            #Query the UserProfile Table using username
-            user = UserProfile.objects.get(username=request.POST.get("username"))
+        user = request.data["username"]
 
+        try:
+            #Getting username from POST request (request.data["username"])
+            #Query the UserProfile Table using username
+            user = UserProfile.objects.get(username=user)
+            print ("User exists")
         except:
             print ("Username is not in the system.")
             try:
@@ -104,7 +106,8 @@ def providerprofile_list(request, format=None):
         print ("Data: " + str(request.data))
 
         try:
-            user = UserProfile.objects.get(username=request.POST.get("username"))
+            username = request.data["username"]
+            user = UserProfile.objects.get(username=username)
         except:
             print ("Username is not in the system.")
             content = "Username is not in the system."
@@ -134,7 +137,8 @@ def jobs_list(request, format=None):
         print ("Data: " + str(request.data))
 
         try:
-            user = UserProfile.objects.get(username=request.POST.get("username"))
+            username = request.data["username"]
+            user = UserProfile.objects.get(username=username)
         except:
             print ("Username is not in the system.")
             content = "Username is not in the system."
