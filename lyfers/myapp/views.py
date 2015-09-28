@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from myapp.models import UserProfile, ProviderProfile, Jobs
 from myapp.serializers import UserProfileSerializer, RegisterSerializer, ProviderProfileSerializer, JobsSerializer
-
+import json
 
 # Django Queryset Functions
 # Multiple filters
@@ -120,8 +120,8 @@ def providerprofile_list(request, format=None):
         print ("Data: " + str(request.data))
 
         try:
-            username = request.data["username"]
-            user = UserProfile.objects.get(username=username)
+            userID = request.data["userID"]
+            user = UserProfile.objects.get(pk=userID)
         except:
             print ("Username is not in the system.")
             content = "Username is not in the system."
@@ -140,6 +140,26 @@ def providerprofile_list(request, format=None):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+def user_providerprofile_list(request, pk, format=None):
+    """
+    Retrieve All User Provider Profiles.
+
+    Path: /api/providerprofiles/USER_ID_NUMBER
+    """
+    try:
+        userprofile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        user_list = ProviderProfile.objects.filter(userID=pk).values('id', 'userID', 'profileTitle', 'description', 'location')
+        print (user_list)
+        return Response(list(user_list))
+
+    Response(status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET', 'POST'])
 def jobs_list(request, format=None):
     """
@@ -148,6 +168,7 @@ def jobs_list(request, format=None):
     POST PARAMETERS
     data = {
         "userID": ID number,
+        "category": "A Category",
         "description": "A description",
         "location": "A location",
         "date": "2015-09-28",
@@ -187,6 +208,27 @@ def jobs_list(request, format=None):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def categories_list(request, format=None):
+    """
+    Retrieve all Categories
+
+    Path /api/jobs/categories/
+
+    """
+
+    try:
+        categories = Jobs.objects.all().values_list('category').distinct()
+
+        return Response(list(categories))
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET'])
 def user_jobs_list(request, pk, format=None):
     """
@@ -201,10 +243,12 @@ def user_jobs_list(request, pk, format=None):
 
     
     if request.method == 'GET':
-        serializer = Jobs.objects.filter(userID=pk).values('id', 'categories','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
-        return Response(list(serializer))
+        user_jobs = Jobs.objects.filter(userID=pk).values('id', 'category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        print (user_jobs)
+        return Response(list(user_jobs))
 
     Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET','DELETE','PUT'])
 def user_job_detail(request, pk, job_number, format=None):
@@ -233,8 +277,8 @@ def user_job_detail(request, pk, job_number, format=None):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = Jobs.objects.filter(id=job_number).values('id', 'categories','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
-        return Response(list(serializer))
+        serializer = Jobs.objects.filter(id=job_number).values('id', 'category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        return Response(serializer)
 
     elif request.method == 'PUT':
         try:

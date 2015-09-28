@@ -1,7 +1,7 @@
 from django.contrib import admin
-from myapp.models import UserProfile, ProviderProfile, Jobs
+from myapp.models import UserProfile, ProviderProfile, Jobs, Application, Contract, Payment
 
 # Register your models here.
-models = {UserProfile, ProviderProfile, Jobs}
+models = {UserProfile, ProviderProfile, Jobs, Application, Contract, Payment}
 
 admin.site.register(models)

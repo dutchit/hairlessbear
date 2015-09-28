@@ -19,7 +19,7 @@ class ProviderProfileSerializer(serializers.ModelSerializer):
 class JobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jobs
-        fields = ('categories','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        fields = ('category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
 
 class LoginSerilizer(serializers.ModelSerializer):
     model = None
