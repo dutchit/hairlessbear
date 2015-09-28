@@ -18,7 +18,7 @@ class UserProfile(models.Model):
         return self.username
 
 class ProviderProfile(models.Model):
-    username = models.ForeignKey(UserProfile)
+    userID = models.ForeignKey(UserProfile)
     profileTitle = models.CharField(max_length=200, blank=True)
     description = models.TextField(blank=True)
     location = models.CharField(max_length=200, blank=True)
@@ -28,7 +28,17 @@ class ProviderProfile(models.Model):
 
 
 class Jobs(models.Model):
-    username = models.ForeignKey(UserProfile)
+    SELECTION_CATEGORY = (
+        ('escort','Escort'),
+        ('pimp', 'Pimp'),
+        ('dominator','Dominator'),
+        ('submissive', 'Submissive'),
+        ('dealer', 'Dealer'),
+        ('seller', 'Seller')
+    )
+
+    categories = models.CharField(max_length=20, choices=SELECTION_CATEGORY, blank=True)
+    userID = models.ForeignKey(UserProfile)
     title = models.CharField(max_length=200, blank=True)
     description = models.TextField(blank=True)
     location = models.CharField(max_length=200, blank=True)
@@ -40,4 +50,4 @@ class Jobs(models.Model):
     upperBound = models.IntegerField(blank=True, default=0)
 
     def __str__(self):
-        return "Jobs by: " + self.username.username
+        return "Jobs by: " + self.userID.username

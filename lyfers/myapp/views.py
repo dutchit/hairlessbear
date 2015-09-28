@@ -62,6 +62,8 @@ def userprofile_list(request, format=None):
 def userprofile_detail(request, pk, format=None):
     """
     Retrieve, update or delete a User Profile.
+
+    Path: api/userprofile/USER_ID_NUMBER
     """
     try:
         userprofile = UserProfile.objects.get(pk=pk)
@@ -128,6 +130,22 @@ def providerprofile_list(request, format=None):
 
 @api_view(['GET', 'POST'])
 def jobs_list(request, format=None):
+    """
+    List all Jobs, or create a new Job.
+
+    POST PARAMETERS
+    data = {
+        "userID": ID number,
+        "description": "A description",
+        "location": "A location",
+        "date": "2015-09-28",
+        "duration": 0,
+        "timeUnit": "",
+        "price": "",
+        "lowerBound": 0,
+        "upperBound": 0
+    }
+    """
     if request.method == 'GET':
         jobs = Jobs.objects.all()
         serializer = JobsSerializer(jobs, many=True)
@@ -137,8 +155,8 @@ def jobs_list(request, format=None):
         print ("Data: " + str(request.data))
 
         try:
-            username = request.data["username"]
-            user = UserProfile.objects.get(username=username)
+            userID = request.data["userID"]
+            user = UserProfile.objects.get(id=userID)
         except:
             print ("Username is not in the system.")
             content = "Username is not in the system."
@@ -156,3 +174,72 @@ def jobs_list(request, format=None):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def user_jobs_list(request, pk, format=None):
+    """
+    Retrieve User's Jobs.
+
+    Path: /api/jobs/USER_ID_NUMBER
+    """
+    try:
+        userprofile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    
+    if request.method == 'GET':
+        serializer = Jobs.objects.filter(userID=pk).values('id', 'categories','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        return Response(list(serializer))
+
+    # elif request.method == 'PUT':
+    #     try:
+    #         jobs = Jobs.objects.get(id=request.data["id"])
+    #     except:
+    #         return Response(data="id is missing",status=status.HTTP_400_BAD_REQUEST)
+
+    #     serializer = JobsSerializer(jobs, data=request.data)
+
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # elif request.method == 'DELETE':
+    #     userprofile.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET','DELETE','PUT'])
+def user_jobs(request, pk, job_number, format=None):
+    """
+    Delete a User's Job.
+
+    Path: /api/jobs/USER_ID_NUMBER/JOB_NUMBER
+    """
+
+    try:
+        userprofile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = Jobs.objects.filter(id=job_number).values('id', 'categories','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        return Response(list(serializer))
+
+    elif request.method == 'PUT':
+        try:
+            jobs = Jobs.objects.get(id=request.data["id"])
+        except:
+            return Response(data="id is missing",status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = JobsSerializer(jobs, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        job = Jobs.objects.get(id=job_number)
+        job.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

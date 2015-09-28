@@ -14,12 +14,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ProviderProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProviderProfile
-        fields = ('id', 'username', 'profileTitle', 'description', 'location')
+        fields = ('id', 'userID', 'profileTitle', 'description', 'location')
 
 class JobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jobs
-        fields = ('username', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        fields = ('categories','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
 
 class LoginSerilizer(serializers.ModelSerializer):
     model = None
