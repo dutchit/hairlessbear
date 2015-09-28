@@ -27,9 +27,19 @@ def userprofile_list(request, format=None):
     print ("UserProfile_list is called.")
 
     if request.method == 'GET':
-        userprofile = UserProfile.objects.all()
-        serializer = RegisterSerializer(userprofile, many=True)
-        return Response(serializer.data)
+#        userprofile = UserProfile.objects.all()
+        try:
+            username = request.query_params.get('username')
+            password = request.query_params.get('password')
+            print ("request: ",username, password)
+            userprofile = UserProfile.objects.get(username=username, password=password)
+        except:
+            print ("username and password is not in the system.")
+            return Response("Username and password are invalid.", status=status.HTTP_400_BAD_REQUEST)
+        if userprofile:
+            print ("found it")
+            serializer = UserProfileSerializer(userprofile)
+            return Response(serializer.data)
 
     elif request.method == 'POST':
         user = request.data["username"]
