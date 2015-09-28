@@ -58,6 +58,7 @@ def userprofile_list(request, format=None):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def userprofile_detail(request, pk, format=None):
     """
@@ -84,6 +85,7 @@ def userprofile_detail(request, pk, format=None):
     elif request.method == 'DELETE':
         userprofile.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(['GET', 'POST'])
 def providerprofile_list(request, format=None):
@@ -192,29 +194,27 @@ def user_jobs_list(request, pk, format=None):
         serializer = Jobs.objects.filter(userID=pk).values('id', 'categories','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
         return Response(list(serializer))
 
-    # elif request.method == 'PUT':
-    #     try:
-    #         jobs = Jobs.objects.get(id=request.data["id"])
-    #     except:
-    #         return Response(data="id is missing",status=status.HTTP_400_BAD_REQUEST)
-
-    #     serializer = JobsSerializer(jobs, data=request.data)
-
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # elif request.method == 'DELETE':
-    #     userprofile.delete()
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
+    Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','DELETE','PUT'])
-def user_jobs(request, pk, job_number, format=None):
+def user_job_detail(request, pk, job_number, format=None):
     """
-    Delete a User's Job.
+    Add, Delete, or Update a User's Job.
 
     Path: /api/jobs/USER_ID_NUMBER/JOB_NUMBER
+
+    PUT PARAMETERS
+    data = {
+        "userID": ID number,
+        "description": "A description",
+        "location": "A location",
+        "date": "2015-09-28",
+        "duration": 0,
+        "timeUnit": "",
+        "price": "",
+        "lowerBound": 0,
+        "upperBound": 0
+    }
     """
 
     try:
@@ -243,3 +243,5 @@ def user_jobs(request, pk, job_number, format=None):
         job = Jobs.objects.get(id=job_number)
         job.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    return Response(status=status.HTTP_400_BAD_REQUEST)
