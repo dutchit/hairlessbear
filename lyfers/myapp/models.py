@@ -41,7 +41,7 @@ class Jobs(models.Model):
     status = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
-        return str(self.id) + " - " + str(self.title)
+        return "ID:" + str(self.id) + " - Title: " + str(self.title)
 
 class Application(models.Model):
     jobID = models.ForeignKey(Jobs)
@@ -64,3 +64,7 @@ class Payment(models.Model):
     employeeID = models.ForeignKey(UserProfile, related_name='payment_employee')
     amount = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     date = models.DateField(default=date.today, blank=True)
+
+class Preference(models.Model):
+    userID = models.ForeignKey(UserProfile)
+    categoery_preference = models.CharField(max_length=200, blank=True)
