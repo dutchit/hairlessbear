@@ -67,4 +67,4 @@ class Payment(models.Model):
 
 class Preference(models.Model):
     userID = models.ForeignKey(UserProfile)
-    categoery_preference = models.CharField(max_length=200, blank=True)
+    category_preference = models.CharField(max_length=200, blank=True)

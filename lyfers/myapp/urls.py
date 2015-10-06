@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^api/jobs/(?P<pk>[0-9]+)/(?P<job_number>[0-9]+)/$', views.user_job_detail),
     url(r'^api/jobs/categories/$', views.categories_list),
     url(r'^api/jobs/contracts/$', views.contract_list),
+    url(r'^api/userprofiles/preferences/$', views.preferences_list)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
