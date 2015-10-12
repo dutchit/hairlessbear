@@ -55,7 +55,7 @@ def jobs_list(request, format=None):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -75,7 +75,7 @@ def categories_list(request, format=None):
 
         for elem in categories:
             list_categories.append(str(elem[0]))
-        
+
         return Response(list_categories)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -95,7 +95,7 @@ def user_jobs_list(request, pk, format=None):
     except UserProfile.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    
+
     if request.method == 'GET':
         user_jobs = Jobs.objects.filter(userID=pk).values('id', 'title','category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
         print (user_jobs)
@@ -136,7 +136,7 @@ def user_job_detail(request, pk, job_number, format=None):
 
     elif request.method == 'PUT':
         try:
-            jobs = Jobs.objects.get(id=request.data["id"])
+            jobs = Jobs.objects.get(id=job_number)
         except:
             return Response(data="id is missing",status=status.HTTP_400_BAD_REQUEST)
 
@@ -197,7 +197,7 @@ def contract_list(request, format=None):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -239,7 +239,7 @@ def preferences_list(request, format=None):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     return Response(status=status.HTTP_400_BAD_REQUEST)
