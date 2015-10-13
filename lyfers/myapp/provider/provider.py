@@ -109,7 +109,12 @@ def user_providerprofile_detail(request, pk, providerprofile_number, format=None
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        provider_profile = ProviderProfile.objects.get(id=providerprofile_number)
+        try:
+            provider_profile = ProviderProfile.objects.get(id=providerprofile_number)
+        except:
+            error_response = "Provider Profile: " + str(providerprofile_number) + " does not exist."
+            return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
+        
         provider_profile.delete()
         success_response = "Successfully deleted Provider Profile: " + providerprofile_number
         return Response(data=success_response, status=status.HTTP_204_NO_CONTENT)
