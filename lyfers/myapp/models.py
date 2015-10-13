@@ -15,7 +15,7 @@ class UserProfile(models.Model):
     password = models.CharField(max_length=20, blank=True)
 
     def __str__(self):  
-        return self.username
+        return "(" + str(self.id) + ") "+ self.username
 
 class ProviderProfile(models.Model):
     userID = models.ForeignKey(UserProfile)
@@ -47,6 +47,13 @@ class Application(models.Model):
     jobID = models.ForeignKey(Jobs)
     job_providerID = models.ForeignKey(UserProfile)
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+
+class Applicant(models.Model):
+    jobID = models.ForeignKey(Jobs)
+    job_applicantID = models.ForeignKey(UserProfile)
+
+    def __str__(self):
+        return "(" + str(self.jobID) + ") " + "Applicant ID: " + str(job_applicantID)
 
 class Contract(models.Model):
     applicationID = models.ForeignKey(Application)
