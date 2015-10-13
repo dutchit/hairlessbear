@@ -67,3 +67,51 @@ def user_providerprofile_list(request, pk, format=None):
         return Response(list(user_list))
 
     Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET','DELETE','PUT'])
+def user_providerprofile_detail(request, pk, providerprofile_number, format=None):
+    """
+    Add, Delete, or Update a User's Job.
+
+    Path: /api/providerprofiles/USER_ID_NUMBER/PROVIDERPROFILE_ID_NUMBER
+
+    PUT PARAMETERS
+    data = {
+        "profileTitle": "Provider Profile Title",
+        "userID": USER ID Number,
+        "description": "Some description",
+        "id": Provider Profile ID Number,
+        "location": "A location"
+    }
+    """
+
+    try:
+        userprofile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        return Response(data="User Does Not Exist", status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ProviderProfile.objects.filter(id=providerprofile_number).values('id', 'userID', 'profileTitle', 'description', 'location')
+        return Response(serializer)
+
+    elif request.method == 'PUT':
+        try:
+            provider_profile = ProviderProfile.objects.get(id=providerprofile_number)
+        except:
+            error_response = "Cannot locate Profile Number: " + providerprofile_number
+            return Response(data=error_response ,status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = ProviderProfileSerializer(provider_profile, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        provider_profile = ProviderProfile.objects.get(id=providerprofile_number)
+        provider_profile.delete()
+        success_response = "Successfully deleted Provider Profile: " + providerprofile_number
+        return Response(data=success_response, status=status.HTTP_204_NO_CONTENT)
+
+    return Response(status=status.HTTP_400_BAD_REQUEST)

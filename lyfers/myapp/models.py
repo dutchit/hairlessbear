@@ -15,7 +15,7 @@ class UserProfile(models.Model):
     password = models.CharField(max_length=20, blank=True)
 
     def __str__(self):  
-        return "(" + str(self.id) + ") "+ self.username
+        return "(" + str(self.id) + ") "+ str(self.username)
 
 class ProviderProfile(models.Model):
     userID = models.ForeignKey(UserProfile)
@@ -24,7 +24,7 @@ class ProviderProfile(models.Model):
     location = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
-        return self.userID.username
+        return  "(" + str(self.id) + ")" + " User ID: " + str(self.userID) + " , Title: " + str(self.profileTitle)
 
 class Jobs(models.Model):
     userID = models.ForeignKey(UserProfile)
@@ -41,19 +41,17 @@ class Jobs(models.Model):
     status = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
-        return "ID:" + str(self.id) + " - Title: " + str(self.title)
+        return "(" + str(self.id) + ") "+ "Title: " + str(self.title) + " - UserID: " + str(self.userID)
 
 class Application(models.Model):
     jobID = models.ForeignKey(Jobs)
-    job_providerID = models.ForeignKey(UserProfile)
+    posterID = models.ForeignKey(UserProfile, related_name='application_posterID')
+    applicantID = models.ForeignKey(UserProfile, related_name='applicantID_applicantID')
+    providerprofileID = models.ForeignKey(ProviderProfile)
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
 
-class Applicant(models.Model):
-    jobID = models.ForeignKey(Jobs)
-    job_applicantID = models.ForeignKey(UserProfile)
-
     def __str__(self):
-        return "(" + str(self.jobID) + ") " + "Applicant ID: " + str(job_applicantID)
+        return "(App ID: " + str(self.id) + ")" + " Job ID: "+ str(self.jobID) + " " + str(self.jobID.title)+ ", Poster ID: " + str(self.posterID) + ", Applicant ID: " + str(self.applicantID) + ", Provider Profile ID: " + str(self.providerprofileID)
 
 class Contract(models.Model):
     applicationID = models.ForeignKey(Application)
