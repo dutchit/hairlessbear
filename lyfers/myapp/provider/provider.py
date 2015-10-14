@@ -119,4 +119,5 @@ def user_providerprofile_detail(request, pk, providerprofile_number, format=None
         success_response = "Successfully deleted Provider Profile: " + providerprofile_number
         return Response(data=success_response, status=status.HTTP_204_NO_CONTENT)
 
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+    error_response = "Method: " + request.method + " is wrong."
+    return Response(data= error_response, status=status.HTTP_400_BAD_REQUEST)

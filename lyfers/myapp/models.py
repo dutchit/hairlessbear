@@ -57,7 +57,7 @@ class Contract(models.Model):
     applicationID = models.ForeignKey(Application)
     jobID = models.ForeignKey(Jobs)
     status = models.CharField(max_length=20, blank=True)
-    job_posterID = models.ForeignKey(UserProfile, related_name='contract_poseterID')
+    job_posterID = models.ForeignKey(UserProfile, related_name='contract_posterID')
     job_poster_rating = models.IntegerField(blank=True, default=0)
     job_applicantID = models.ForeignKey(UserProfile, related_name='contract_applicantID')
     job_applicant_rating = models.IntegerField(blank=True, default=0)
