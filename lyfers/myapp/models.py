@@ -49,6 +49,7 @@ class Application(models.Model):
     applicantID = models.ForeignKey(UserProfile, related_name='applicantID_applicantID')
     providerprofileID = models.ForeignKey(ProviderProfile)
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, blank=True, default="Submitted")
 
     def __str__(self):
         return "(App ID: " + str(self.id) + ")" + " Job ID: "+ str(self.jobID) + " " + str(self.jobID.title)+ ", Applicant ID: " + str(self.applicantID) + ", Provider Profile ID: " + str(self.providerprofileID)
@@ -61,6 +62,10 @@ class Contract(models.Model):
     job_poster_rating = models.IntegerField(blank=True, default=0)
     job_applicantID = models.ForeignKey(UserProfile, related_name='contract_applicantID')
     job_applicant_rating = models.IntegerField(blank=True, default=0)
+    date = models.DateField(default=date.today, blank=True)
+
+    def __str__(self):
+        return "(Contract ID: " + str(self.id) + ") " + "Job ID: " + str(self.jobID) + ", Job Poster ID: " + str(self.job_posterID) + ", Job Applicant ID: " + str(self.job_applicantID)
 
 class Payment(models.Model):
     contractID = models.ForeignKey(Contract, related_name='payment_contractID')
@@ -68,6 +73,9 @@ class Payment(models.Model):
     employeeID = models.ForeignKey(UserProfile, related_name='payment_employee')
     amount = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     date = models.DateField(default=date.today, blank=True)
+
+    def __str__(self):
+        return "(Payment ID: " + str(self.id) + ") " + "Contract ID: " + str(self.contractID) + ", Employer ID: " + str(self.employerID) + ", Employee ID: " + str(self.employeeID)
 
 class Preference(models.Model):
     userID = models.ForeignKey(UserProfile)

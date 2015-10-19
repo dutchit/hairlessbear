@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from myapp.models import UserProfile, Jobs, Contract
 from myapp.serializers import JobsSerializer, ContractSerializer
+from datetime import date
 import json
 
 @api_view(['GET', 'POST'])
@@ -98,6 +99,53 @@ def user_jobs_list(request, pk, format=None):
 
     Response(status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def user_current_jobs_list(request, pk, format=None):
+    """
+    Retrieve User's Current Jobs.
+
+    Path: /api/jobs/USER_ID_NUMBER/current
+    """
+    today = date.today()
+
+    try:
+        userprofile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        error_response = "USER does not exist."
+        return Response(data=error_response, status=status.HTTP_404_NOT_FOUND)
+
+
+    if request.method == 'GET':
+        user_jobs = Jobs.objects.filter(userID=pk, date__gte=today).values('id', 'title','category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        print (user_jobs)
+        return Response(list(user_jobs))
+
+    error_response = "GET method needed."
+    Response(data=error_response,status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def user_previous_jobs_list(request, pk, format=None):
+    """
+    Retrieve User's Previous Jobs.
+
+    Path: /api/jobs/USER_ID_NUMBER/previous
+    """
+    today = date.today()
+
+    try:
+        userprofile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        error_response = "USER does not exist."
+        return Response(data=error_response, status=status.HTTP_404_NOT_FOUND)
+
+
+    if request.method == 'GET':
+        user_jobs = Jobs.objects.filter(userID=pk, date__lt=today).values('id', 'title','category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        print (user_jobs)
+        return Response(list(user_jobs))
+
+    error_response = "GET method needed."
+    Response(data=error_response,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','DELETE','PUT'])
 def user_job_detail(request, pk, job_number, format=None):
@@ -154,7 +202,7 @@ def contract_list(request, format=None):
     """
     List all Contracts, or create a new Contract.
 
-    Path: /api/jobs/contracts/
+    Path: /api/jobs/contracts
 
     POST PARAMETERS
     data = {
@@ -165,7 +213,6 @@ def contract_list(request, format=None):
         "job_poster_rating": "Job Poster Rating",
         "job_applicantID": "Job Applicant ID number",
         "job_applicant_rating": "Job Applicant Rating",
-        "payment": "Payment ID number",
     }
     """
     if request.method == 'GET':
@@ -198,3 +245,99 @@ def contract_list(request, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def poster_currrent_contracts(request, pk, format=None):
+    """
+    Retrieve Job Poster's Current Contracts.
+
+    Path: /api/jobs/contracts/poster/USER_ID_NUMBER/current
+    """
+    today = date.today()
+
+    try:
+        userprofile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        error_response = "USER does not exist."
+        return Response(data=error_response, status=status.HTTP_404_NOT_FOUND)
+
+
+    if request.method == 'GET':
+        user_jobs = Contract.objects.filter(job_posterID=pk, date__gte=today).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
+        print (user_jobs)
+        return Response(list(user_jobs))
+
+    error_response = "GET method needed."
+    Response(data=error_response,status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def applicant_current_contracts(request, pk, format=None):
+    """
+    Retrieve Job Applicant's Current Contracts.
+    
+    Path: /api/jobs/contracts/applicant/USER_ID_NUMBER/current
+    """
+    today = date.today()
+
+    try:
+        userprofile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        error_response = "USER does not exist."
+        return Response(data=error_response, status=status.HTTP_404_NOT_FOUND)
+
+
+    if request.method == 'GET':
+        user_jobs = Contract.objects.filter(job_applicantID=pk, date__gte=today).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
+        print (user_jobs)
+        return Response(list(user_jobs))
+
+    error_response = "GET method needed."
+    Response(data=error_response,status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def poster_previous_contracts(request, pk, format=None):
+    """
+    Retrieve Job Poster's Previous Contracts.
+
+    Path: /api/jobs/contracts/poster/USER_ID_NUMBER/current
+    """
+    today = date.today()
+
+    try:
+        userprofile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        error_response = "USER does not exist."
+        return Response(data=error_response, status=status.HTTP_404_NOT_FOUND)
+
+
+    if request.method == 'GET':
+        user_jobs = Contract.objects.filter(job_posterID=pk, date__lt=today).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
+        print (user_jobs)
+        return Response(list(user_jobs))
+
+    error_response = "GET method needed."
+    Response(data=error_response,status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def applicant_previous_contracts(request, pk, format=None):
+    """
+    Retrieve Job Applicant's Previous Contracts.
+    
+    Path: /api/jobs/contracts/applicant/USER_ID_NUMBER/current
+    """
+    today = date.today()
+
+    try:
+        userprofile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        error_response = "USER does not exist."
+        return Response(data=error_response, status=status.HTTP_404_NOT_FOUND)
+
+
+    if request.method == 'GET':
+        user_jobs = Contract.objects.filter(job_applicantID=pk, date__lt=today).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
+        print (user_jobs)
+        return Response(list(user_jobs))
+
+    error_response = "GET method needed."
+    Response(data=error_response,status=status.HTTP_400_BAD_REQUEST)
