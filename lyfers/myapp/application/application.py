@@ -70,6 +70,43 @@ def application_list(request, format=None):
 
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET','PUT'])
+def application_detail(request, application_number, format=None):
+    """
+    Retrieve or Modify an existing Application.
+
+    Path: /api/jobs/applications/APPLICATION_NUMBER
+
+    POST PARAMETERS
+    data = {
+        "jobID": Job ID number,
+        "application_posterID": Application Poster ID number,
+        "applicantID": Applicant ID number,
+        "providerprofileID": Provider Profile ID Number,
+        "price": A price,
+        "status": "A status"
+    }
+    """
+    try:
+        application = Application.objects.get(id=application_number)
+    except:
+        error_response = "Application does not exist."
+        return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'GET':
+        serializer = ApplicationSerializer(application)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = ApplicationSerializer(application, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET'])
 def job_applicant_list(request, job_number, format=None):
     """
@@ -84,3 +121,4 @@ def job_applicant_list(request, job_number, format=None):
         return Response(list(job_applicants))
 
     Response(status=status.HTTP_400_BAD_REQUEST)
+

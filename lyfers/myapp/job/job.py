@@ -398,3 +398,44 @@ def applicant_previous_contracts(request, pk, format=None):
 
     error_response = "GET method needed."
     Response(data=error_response,status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET','PUT'])
+def contract_detail(request, contract_number, format=None):
+    """
+    Add or Update a Contract.
+
+    Path: /api/contracts/CONTRACT_NUMBER
+
+    PUT PARAMETERS
+    data = {
+        "id": Contract ID,
+        "applicationID": Application ID,
+        "jobID": Job ID,
+        "status": "A status",
+        "job_posterID": Job Poster ID,
+        "job_poster_rating": Job Poster Rating,
+        'job_applicantID': Job Applicant ID,
+        'job_applicant_rating': Job Applicant Rating
+    }
+    """
+    try:
+        contract = Contract.objects.get(id=contract_number)
+    except:
+        error_response = "Contract Does Not Exist"
+        return Response(data=error_response, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        contract = Contract.objects.filter(id=contract_number).values('id', 'applicationID', 'jobID', 'status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating')
+        return Response(contract)
+
+    elif request.method == 'PUT':
+        serializer = ContractSerializer(contract, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    error_response = "Method: " + request.method + " is wrong."
+    return Response(data= error_response, status=status.HTTP_400_BAD_REQUEST)
+

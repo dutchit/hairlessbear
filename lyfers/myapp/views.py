@@ -16,6 +16,8 @@ def preferences_list(request, format=None):
     """
     List all Preferences, or create a new Preference.
 
+    Path: /api/userprofiles/preferences
+
     POST PARAMETERS
     data = {
         "userID": "User ID number",

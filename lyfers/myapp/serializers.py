@@ -27,7 +27,7 @@ class LoginSerilizer(serializers.ModelSerializer):
 class ContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contract
-        fields = ('applicationID', 'jobID', 'status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating')
+        fields = ('id','applicationID', 'jobID', 'status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating')
 
 class PreferenceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,4 +37,4 @@ class PreferenceSerializer(serializers.ModelSerializer):
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
-        fields = ('jobID', 'application_posterID', 'applicantID', 'providerprofileID', 'price', 'status')
+        fields = ('id','jobID', 'application_posterID', 'applicantID', 'providerprofileID', 'price', 'status')
