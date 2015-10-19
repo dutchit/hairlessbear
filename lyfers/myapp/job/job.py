@@ -321,7 +321,11 @@ def poster_currrent_contracts(request, pk, format=None):
 
     if request.method == 'GET':
         user_jobs = Contract.objects.filter(job_posterID=pk, date__gte=today).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
-        print (user_jobs)
+        for current_contract in user_jobs:
+            job = Jobs.objects.filter(id=current_contract['jobID']).values('title')
+            print ("Poster Current Contracts")
+            current_contract['job_title'] = job[0]['title']
+
         return Response(list(user_jobs))
 
     error_response = "GET method needed."
@@ -345,7 +349,10 @@ def applicant_current_contracts(request, pk, format=None):
 
     if request.method == 'GET':
         user_jobs = Contract.objects.filter(job_applicantID=pk, date__gte=today).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
-        print (user_jobs)
+        for current_contract in user_jobs:
+            job = Jobs.objects.filter(id=current_contract['jobID']).values('title')
+            print ("Applicant Current Contracts")
+            current_contract['job_title'] = job[0]['title']
         return Response(list(user_jobs))
 
     error_response = "GET method needed."
@@ -369,7 +376,10 @@ def poster_previous_contracts(request, pk, format=None):
 
     if request.method == 'GET':
         user_jobs = Contract.objects.filter(job_posterID=pk, date__lt=today).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
-        print (user_jobs)
+        for prev_contract in user_jobs:
+            job = Jobs.objects.filter(id=prev_contract['jobID']).values('title')
+            print ("Poster Previous Contracts")
+            prev_contract['job_title'] = job[0]['title']
         return Response(list(user_jobs))
 
     error_response = "GET method needed."
@@ -393,7 +403,10 @@ def applicant_previous_contracts(request, pk, format=None):
 
     if request.method == 'GET':
         user_jobs = Contract.objects.filter(job_applicantID=pk, date__lt=today).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
-        print (user_jobs)
+        for prev_contract in user_jobs:
+            job = Jobs.objects.filter(id=prev_contract['jobID']).values('title')
+            print ("Applicant Previous Contracts")
+            prev_contract['job_title'] = job[0]['title']
         return Response(list(user_jobs))
 
     error_response = "GET method needed."
@@ -426,6 +439,13 @@ def contract_detail(request, contract_number, format=None):
 
     if request.method == 'GET':
         contract = Contract.objects.filter(id=contract_number).values('id', 'applicationID', 'jobID', 'status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating')
+        for user_contract in contract:
+            try:
+                job = Jobs.objects.filter(id=user_contract['jobID']).values('title')
+            except:
+                error_response = "Job does not exist."
+                return Response(data=error_response, status=status.HTTP_404_NOT_FOUND)    
+            user_contract['job_title'] = job[0]['title']
         return Response(contract)
 
     elif request.method == 'PUT':

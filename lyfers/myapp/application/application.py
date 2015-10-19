@@ -11,7 +11,7 @@ def application_list(request, format=None):
     """
     List all Application, or create a Application.
 
-    Path /api/applications
+    Path /api/jobs/applications
 
     POST PARAMETERS
     data = {
