@@ -11,6 +11,8 @@ def jobs_list(request, format=None):
     """
     List all Jobs, or create a new Job.
 
+    Path /api/jobs
+
     POST PARAMETERS
     data = {
         "userID": ID number,
