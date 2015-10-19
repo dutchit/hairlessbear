@@ -56,12 +56,67 @@ def jobs_list(request, format=None):
 
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET', 'POST'])
+def current_jobs_list(request, format=None):
+    """
+    List all current Jobs, or create a new Job.
+
+    Path /api/jobs/current
+
+    POST PARAMETERS
+    data = {
+        "userID": ID number,
+        "category": "A Category",
+        "description": "A description",
+        "location": "A location",
+        "date": "2015-09-28",
+        "duration": 0,
+        "timeUnit": "",
+        "price": "",
+        "lowerBound": 0,
+        "upperBound": 0
+    }
+    """
+    today = date.today()
+
+    if request.method == 'GET':
+        current_jobs = Jobs.objects.filter(date__gte=today).values('id', 'title','category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        # serializer = JobsSerializer(jobs, many=True)
+        return Response(list(current_jobs))
+        # return Response(serializer.data)
+
+    elif request.method == 'POST':
+        print ("Data: " + str(request.data))
+
+        try:
+            userID = request.data["userID"]
+            user = UserProfile.objects.get(id=userID)
+        except:
+            print ("Username is not in the system.")
+            content = "Username is not in the system."
+            Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            serializer = JobsSerializer(data=request.data)
+        except:
+            print ("Data is wrong compared to Jobs Serializer.")
+            content = "Data is wrong compared to Jobs Profile Serializer."
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET'])
 def categories_list(request, format=None):
     """
     Retrieve all Categories
 
-    Path /api/jobs/categories/
+    Path /api/jobs/categories
 
     """
 

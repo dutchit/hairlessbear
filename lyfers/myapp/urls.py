@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^api/providerprofiles/(?P<pk>[0-9]+)$', provider.user_providerprofile_list),
     url(r'^api/providerprofiles/(?P<pk>[0-9]+)/(?P<providerprofile_number>[0-9]+)$', provider.user_providerprofile_detail),
     url(r'^api/jobs$', job.jobs_list),
+    url(r'^api/jobs/current$', job.current_jobs_list),
     url(r'^api/jobs/(?P<pk>[0-9]+)$', job.user_jobs_list),
     url(r'^api/jobs/(?P<pk>[0-9]+)/current$', job.user_current_jobs_list),
     url(r'^api/jobs/(?P<pk>[0-9]+)/previous$', job.user_previous_jobs_list),
