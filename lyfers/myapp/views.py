@@ -60,6 +60,13 @@ def preferences_list(request, format=None):
 def send_email(request, format=None):
     """
         Send email to a recipient.
+
+        Path: api/email
+
+        POST PARAMETERS:
+        data = {
+            "email":"email@address.com"
+        }
     """
     if request.method =='POST':
         title = "Lyfers Reset Password"
