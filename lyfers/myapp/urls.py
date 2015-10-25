@@ -11,6 +11,7 @@ urlpatterns = [
     # url(r'^api/userprofile/(?P<pk>[0-9]+)/$', views.userprofile_detail),
     url(r'^api/userprofiles$', user.userprofile_list),
     url(r'^api/userprofiles/(?P<pk>[0-9]+)$', user.userprofile_detail),
+    url(r'api/userprofiles/(?P<pk>[0-9]+)/jobs$', user.job_list),
     url(r'^api/providerprofiles$', provider.providerprofile_list),
     url(r'^api/providerprofiles/(?P<pk>[0-9]+)$', provider.user_providerprofile_list),
     url(r'^api/providerprofiles/(?P<pk>[0-9]+)/(?P<providerprofile_number>[0-9]+)$', provider.user_providerprofile_detail),
