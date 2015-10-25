@@ -20,7 +20,7 @@ def application_list(request, format=None):
         "applicantID": Applicant ID number,
         "providerprofileID": Provider Profile ID Number,
         "price": A price,
-        "status": "A status"
+        "status": "Submited/Choosen"
     }
     """
     if request.method == 'GET':
@@ -84,7 +84,7 @@ def application_detail(request, application_number, format=None):
         "applicantID": Applicant ID number,
         "providerprofileID": Provider Profile ID Number,
         "price": A price,
-        "status": "A status"
+        "status": "Submited/Choosen"
     }
     """
     try:
