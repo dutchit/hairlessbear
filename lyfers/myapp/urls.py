@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^api/jobs/contracts/applicant/(?P<pk>[0-9]+)/current$', job.applicant_current_contracts),
     url(r'^api/jobs/contracts/poster/(?P<pk>[0-9]+)/previous$', job.poster_previous_contracts),
     url(r'^api/jobs/contracts/applicant/(?P<pk>[0-9]+)/previous$', job.applicant_previous_contracts),
-    url(r'^api/userprofiles/preferences$', views.preferences_list)
+    url(r'^api/userprofiles/preferences$', views.preferences_list),
     url(r'^api/email$', views.send_email)
 ]
 

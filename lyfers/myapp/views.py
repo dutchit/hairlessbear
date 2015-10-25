@@ -57,4 +57,13 @@ def preferences_list(request, format=None):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 def send_email(request, format=None):
-    send_mail('Test Forgot Password', 'Please go to this link to reset your password', 'lyfersapp@gmail.com', ['rryy19@hotmail.com'], fail_silently=False)
+    if request.method == 'GET':
+        title = "Lyfers Reset Password"
+        message = "You have requested to reset your password. Please go to <a> href='#'</a>"
+        recipient = request.data["email"]
+        sender = "lyfersapp@gmail.com"
+        send_mail(title, message, sender, [recipient], fail_silently=False)
+        response = "Email sent to " + recipient
+        return Response(data=response, status=status.HTTP_200_OK)
+    error_response = "Method must be POST"
+    return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
