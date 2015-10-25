@@ -57,7 +57,7 @@ def preferences_list(request, format=None):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 def send_email(request, format=None):
-    if request.method == 'GET':
+    if request.method == 'POST':
         title = "Lyfers Reset Password"
         message = "You have requested to reset your password. Please go to <a> href='#'</a>"
         recipient = request.data["email"]
