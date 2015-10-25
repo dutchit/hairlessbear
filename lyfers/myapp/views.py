@@ -61,9 +61,9 @@ def send_email(request, format=None):
     """
         Send email to a recipient.
     """
-    if request.method == 'POST':
+    if request.method =='POST':
         title = "Lyfers Reset Password"
-        message = "You have requested to reset your password. Please go to <a> href='#'</a>"
+        message = "You have requested to reset your password. Please go to www.lyfersapp.com/reset_password."
         try:
             recipient = request.data["email"]
         except:        
@@ -71,7 +71,6 @@ def send_email(request, format=None):
         sender = "lyfersapp@gmail.com"
         send_mail(title, message, sender, [recipient], fail_silently=False)
         response = "Email sent to " + recipient
-        return Response(data=response, status=status.HTTP_200_OK)
-    
+        return Response(data=response, status=status.HTTP_200_OK)    
     error_response = "Method must be POST"
     return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
