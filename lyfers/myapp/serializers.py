@@ -4,7 +4,7 @@ from myapp.models import UserProfile, ProviderProfile, Jobs, Contract, Preferenc
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('id','username', 'profileTitle', 'description', 'contactEmail', 'displayName', 'first_name', 'last_name', 'location')
+        fields = ('id','username', 'profileTitle', 'description', 'contactEmail', 'displayName', 'first_name', 'last_name', 'location', 'employer_rating', 'employee_rating')
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
