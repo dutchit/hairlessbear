@@ -93,24 +93,4 @@ def userprofile_detail(request, pk, format=None):
         userprofile.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['GET'])
-def job_list(request, pk, format=None):
-    """
-    Retreive all employer jobs associated with a User Profile
-
-    Path: api/userprofile/USER_ID_NUMBER/jobs
-    """
-
-    try:
-        userprofile = UserProfile.objects.get(pk=pk)
-    except UserProfile.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        jobs = Jobs.objects.filter(userID=pk).values('id')
-        return Response(list(jobs))
-
-    error_response = "Method is not GET"
-    return Response(data=error_response, status=status.HTTP_404_NOT_FOUND)
-
 
