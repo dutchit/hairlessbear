@@ -56,14 +56,22 @@ def preferences_list(request, format=None):
 
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
 def send_email(request, format=None):
+    """
+        Send email to a recipient.
+    """
     if request.method == 'POST':
         title = "Lyfers Reset Password"
         message = "You have requested to reset your password. Please go to <a> href='#'</a>"
-        recipient = request.data["email"]
+        try:
+            recipient = request.data["email"]
+        except:        
+            Response(status=status.HTTP_400_BAD_REQUEST)
         sender = "lyfersapp@gmail.com"
         send_mail(title, message, sender, [recipient], fail_silently=False)
         response = "Email sent to " + recipient
         return Response(data=response, status=status.HTTP_200_OK)
+    
     error_response = "Method must be POST"
     return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
