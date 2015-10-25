@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from myapp.models import UserProfile, ProviderProfile, Jobs, Contract, Preference
 from myapp.serializers import UserProfileSerializer, RegisterSerializer, ProviderProfileSerializer, JobsSerializer, ContractSerializer, PreferenceSerializer
+from django.core.mail import send_mail
 import json
 
 # Django Queryset Functions
@@ -55,3 +56,5 @@ def preferences_list(request, format=None):
 
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+def send_email(request, format=None):
+    send_mail('Test Forgot Password', 'Please go to this link to reset your password', 'lyfersapp@gmail.com', ['rryy19@hotmail.com'], fail_silently=False)
