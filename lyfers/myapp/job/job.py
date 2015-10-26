@@ -455,9 +455,33 @@ def contract_detail(request, contract_number, format=None):
 
         if serializer.is_valid():
             serializer.save()
+            update_rating(request, contract)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     error_response = "Method: " + request.method + " is wrong."
     return Response(data= error_response, status=status.HTTP_400_BAD_REQUEST)
 
+def update_rating(request, contract):
+    print("update_rating called")
+    rating = 0
+    poster = UserProfile.objects.get(id=contract.job_posterID.id)
+    applicant = UserProfile.objects.get(id=contract.job_applicantID.id)
+  
+    print ("Calulating Employer Rating")
+    poster_contracts = Contract.objects.filter(job_posterID=poster.id).values('job_poster_rating')
+    print (poster_contracts)
+    for contract in poster_contracts:
+        rating = rating + contract['job_poster_rating']
+
+    poster.employer_rating = rating/len(poster_contracts)
+    poster.save()
+    
+    print ("Calulating Applicant Rating")
+    rating = 0
+    applicant_contracts = Contract.objects.filter(job_applicantID=applicant.id).values('job_applicant_rating')
+    for contract in applicant_contracts:
+        rating = rating + contract['job_applicant_rating']
+
+    applicant.employee_rating = rating/len(applicant_contracts)
+    applicant.save()

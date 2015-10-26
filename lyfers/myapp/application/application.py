@@ -217,7 +217,7 @@ def send_email(user):
         Send email that the recipient has been choosen for the job.
     """
     title = "Lyfers: Congratulation You Have Been Choosen!"
-    message = "You have been choosen for the job! Please go to www.lyfersapp.com/reset_password."
+    message = "You have been choosen for the job! Please go to www.lyfersapp.com/confirm."
     recipient = user.contactEmail
     sender = "lyfersapp@gmail.com"
     send_mail(title, message, sender, [recipient], fail_silently=False)
