@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from myapp.models import UserProfile, Application, ProviderProfile, Jobs
+from myapp.models import UserProfile, Application, ProviderProfile, Jobs, UserProfile
 from myapp.serializers import ApplicationSerializer, ContractSerializer, JobsSerializer
 from datetime import date
 import json
@@ -20,7 +20,7 @@ def application_list(request, format=None):
         "applicantID": Applicant ID number,
         "providerprofileID": Provider Profile ID Number,
         "price": A price,
-        "status": "Submited/Choosen"
+        "status": "Submited/Choosen/Declined"
     }
     """
     if request.method == 'GET':
@@ -190,3 +190,34 @@ def update_job(id):
     job.status = "Contract"
     job.save()
 
+@api_view(['POST'])
+def application_choosen(request, application_number, format=None):
+    """
+    Choose an Applicant.
+
+    Path: /api/jobs/applications/APPLICATION_NUMBER/choosen
+    """
+
+    if request.method == 'POST':
+        try:
+            application = Application.objects.get(id=application_number)
+        except:
+            error_response = "Application does not exist."
+            return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)          
+        application.status = "Choosen"
+        application.save()
+        user = UserProfile.objects.get(id=application.applicantID.id)
+        # send_email(user)
+        return Response(status=status.HTTP_200_OK)
+    error_response = "Request Method is not POST"
+    return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
+
+def send_email(user):
+    """
+        Send email that the recipient has been choosen for the job.
+    """
+    title = "Lyfers: Congratulation You Have Been Choosen!"
+    message = "You have been choosen for the job! Please go to www.lyfersapp.com/reset_password."
+    recipient = user.contactEmail
+    sender = "lyfersapp@gmail.com"
+    send_mail(title, message, sender, [recipient], fail_silently=False)
