@@ -250,7 +250,8 @@ def user_job_detail(request, pk, job_number, format=None):
 
     elif request.method == 'DELETE':
         job = Jobs.objects.get(id=job_number)
-        job.delete()
+        job.status = "Deleted"
+        job.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     return Response(status=status.HTTP_400_BAD_REQUEST)

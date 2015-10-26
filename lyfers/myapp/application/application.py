@@ -37,7 +37,7 @@ def application_list(request, format=None):
         except:
             print ("Poster ID is not in the system.")
             content = "Poster ID is not in the system."
-            Response(data=content, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data=content, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             applicantID = request.data["applicantID"]
@@ -45,29 +45,50 @@ def application_list(request, format=None):
         except:
             print ("Appicant ID is not in the system.")
             content = "Applicant ID is not in the system."
-            Response(data=content, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data=content, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             providerprofileID = request.data["providerprofileID"]
-            user = UserProfile.objects.get(id=providerprofileID)
+            user = ProviderProfile.objects.get(id=providerprofileID)
         except:
             print ("Provider Profile ID is not in the system.")
             content = "Provider Profile ID is not in the system."
-            Response(data=content, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data=content, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            serializer = ApplicationSerializer(data=request.data)
+            application = Application.objects.get(applicantID=applicantID, jobID=request.data["jobID"])
+        except:      
+            print("Application does not exist.")  
+            try:
+                serializer = ApplicationSerializer(data=request.data)
+            except:
+                print ("Data is wrong compared to Application Serializer.")
+                content = "Data is wrong compared to Application Serializer."
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+            print ("New serializer data:", serializer.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            print ("Request Data")
+            print (request.data)
+            serializer = ApplicationSerializer(application, data=request.data)
         except:
-            print ("Data is wrong compared to Application Serializer.")
-            content = "Data is wrong compared to Application Serializer."
-            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+            error_response = "ApplicationSerializer does not match."
+            return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
 
         if serializer.is_valid():
+            print ("Serializer data:", serializer.data)
+            print ("Serializer Valid.")
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response(request.data, status=status.HTTP_201_CREATED)
+        else:
+            error_response = "Serializer is not valid."
+            return Response(status=status.HTTP_400_BAD_REQUEST)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','PUT'])
