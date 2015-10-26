@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from myapp.models import UserProfile, Application, ProviderProfile
-from myapp.serializers import ApplicationSerializer
+from myapp.serializers import ApplicationSerializer, ContractSerializer
 from datetime import date
 import json
 
@@ -122,3 +122,45 @@ def job_applicant_list(request, job_number, format=None):
 
     Response(status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+def application_accepted(request, application_number, format=None):
+    """
+    Trigger to create a Contract.
+
+    Path: /api/jobs/applications/APPLICATION_NUMBER/accepted
+    """
+
+    if request.method == 'POST':
+        # contract.fields = ('id','applicationID', 'jobID', 'status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating')
+        # application.fields = ('id','jobID', 'application_posterID', 'applicantID', 'providerprofileID', 'price', 'status')
+        try:
+            application = Application.objects.get(id=application_number)
+            serializer = ApplicationSerializer(application)
+        except:
+            error_response = "Application does not exist."
+            return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
+
+        data = {
+            "applicationID": serializer.data["id"],
+            "jobID": serializer.data["jobID"],
+            "status": "Incomplete",
+            "job_posterID": serializer.data["application_posterID"],
+            "job_applicantID": serializer.data["applicantID"],
+            "job_poster_rating": 1,
+            "job_applicant_rating": 1
+        }
+        print ("Data: ", data)
+
+        try:
+            serializer = ContractSerializer(data=data)
+        except:
+            print ("Serializer DATA: ", serializer.data)
+            error_response = "Data does not match ContractSerializer."
+            return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    error_response = "Request Method is not POST"
+    return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)

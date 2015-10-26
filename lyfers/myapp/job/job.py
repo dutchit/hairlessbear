@@ -265,7 +265,7 @@ def contract_list(request, format=None):
     data = {
         "applicationID": "Application ID number",
         "jobID": "Job ID number",
-        "status": "A status",
+        "status": "Incomplete or Completed",
         "job_posterID": "Job Poster ID number",
         "job_poster_rating": "Job Poster Rating",
         "job_applicantID": "Job Applicant ID number",
@@ -424,7 +424,7 @@ def contract_detail(request, contract_number, format=None):
         "id": Contract ID,
         "applicationID": Application ID,
         "jobID": Job ID,
-        "status": "A status",
+        "status": "Incomplete or Completed",
         "job_posterID": Job Poster ID,
         "job_poster_rating": Job Poster Rating,
         'job_applicantID': Job Applicant ID,
