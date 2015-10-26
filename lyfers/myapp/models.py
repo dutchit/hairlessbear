@@ -15,7 +15,7 @@ class UserProfile(models.Model):
     password = models.CharField(max_length=20, blank=True)
     employer_rating = models.IntegerField(default=0, blank=True)
     employee_rating = models.IntegerField(default=0, blank=True)
-    
+
     def __str__(self):
         return "(" + str(self.id) + ") "+ str(self.username)
 
@@ -40,7 +40,7 @@ class Jobs(models.Model):
     price = models.CharField(max_length=5, blank=True)
     lowerBound = models.IntegerField(blank=True, default=0)
     upperBound = models.IntegerField(blank=True, default=0)
-    status = models.CharField(max_length=20, blank=True)
+    status = models.CharField(max_length=20, blank=True, default="Active")
 
     def __str__(self):
         return "(" + str(self.id) + ") "+ "Title: " + str(self.title) + " - UserID: " + str(self.userID)
