@@ -150,7 +150,7 @@ def user_jobs_list(request, pk, format=None):
 
 
     if request.method == 'GET':
-        user_jobs = Jobs.objects.filter(userID=pk).values('id', 'title','category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        user_jobs = Jobs.objects.filter(userID=pk).values('id', 'title','category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound', 'status')
         print (user_jobs)
         return Response(list(user_jobs))
 
@@ -197,7 +197,7 @@ def user_previous_jobs_list(request, pk, format=None):
 
 
     if request.method == 'GET':
-        user_jobs = Jobs.objects.filter(userID=pk, date__lt=today).values('id', 'title','category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        user_jobs = Jobs.objects.filter(userID=pk, date__lt=today).values('id', 'title','category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound', 'status')
         print (user_jobs)
         return Response(list(user_jobs))
 
@@ -221,7 +221,8 @@ def user_job_detail(request, pk, job_number, format=None):
         "timeUnit": "",
         "price": "",
         "lowerBound": 0,
-        "upperBound": 0
+        "upperBound": 0,
+        "status": "Active, Contract, Deleted, or Expired"
     }
     """
 
@@ -231,7 +232,7 @@ def user_job_detail(request, pk, job_number, format=None):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = Jobs.objects.filter(id=job_number).values('id', 'category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        serializer = Jobs.objects.filter(id=job_number).values('id', 'category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound', 'status')
         return Response(serializer)
 
     elif request.method == 'PUT':
