@@ -173,7 +173,7 @@ def user_current_jobs_list(request, pk, format=None):
 
 
     if request.method == 'GET':
-        user_jobs = Jobs.objects.filter(userID=pk, date__gte=today).values('id', 'title','category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound')
+        user_jobs = Jobs.objects.filter(userID=pk, date__gte=today).values('id', 'title','category','userID', 'description', 'location', 'date', 'duration', 'timeUnit', 'price', 'lowerBound', 'upperBound', 'status')
         print (user_jobs)
         return Response(list(user_jobs))
 

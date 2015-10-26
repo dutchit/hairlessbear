@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from myapp.models import UserProfile, Application, ProviderProfile
-from myapp.serializers import ApplicationSerializer, ContractSerializer
+from myapp.models import UserProfile, Application, ProviderProfile, Jobs
+from myapp.serializers import ApplicationSerializer, ContractSerializer, JobsSerializer
 from datetime import date
 import json
 
@@ -149,18 +149,23 @@ def application_accepted(request, application_number, format=None):
             "job_poster_rating": 1,
             "job_applicant_rating": 1
         }
-        print ("Data: ", data)
 
         try:
             serializer = ContractSerializer(data=data)
         except:
-            print ("Serializer DATA: ", serializer.data)
             error_response = "Data does not match ContractSerializer."
             return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
 
         if serializer.is_valid():
             serializer.save()
+            update_job(serializer.data["jobID"])
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     error_response = "Request Method is not POST"
     return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
+
+def update_job(id):
+    job = Jobs.objects.get(id=id)
+    job.status = "Contract"
+    job.save()
+
