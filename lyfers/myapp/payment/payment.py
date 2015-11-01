@@ -67,7 +67,7 @@ def payment_list(request, format=None):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','PUT'])
-def payment_detail(request, application_number, format=None):
+def payment_detail(request, payment_number, format=None):
     """
     Retrieve or Modify an existing Payment.
 
@@ -89,11 +89,11 @@ def payment_detail(request, application_number, format=None):
         return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'GET':
-        serializer = ApplicationSerializer(payment)
+        serializer = PaymentSerializer(payment)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = ApplicationSerializer(payment, data=request.data)
+        serializer = PaymentSerializer(payment, data=request.data)
 
         if serializer.is_valid():
             serializer.save()
