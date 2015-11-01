@@ -57,7 +57,7 @@ def preferences_list(request, format=None):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
-def send_email(request, format=None):
+def reset_password(request, format=None):
     """
         Send email to a recipient.
 

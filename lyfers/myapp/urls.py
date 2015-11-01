@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^api/jobs/contracts/poster/(?P<pk>[0-9]+)/previous$', job.poster_previous_contracts),
     url(r'^api/jobs/contracts/applicant/(?P<pk>[0-9]+)/previous$', job.applicant_previous_contracts),
     url(r'^api/userprofiles/preferences$', views.preferences_list),
-    url(r'^api/email$', views.send_email)
+    url(r'^api/rest-password$', views.rest_password)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
