@@ -5,6 +5,7 @@ from myapp.user import user
 from myapp.provider import provider
 from myapp.job import job
 from myapp.application import application
+from myapp.payment import payment
 
 urlpatterns = [
     # url(r'^api/userprofiles/$', views.userprofile_list),
@@ -32,8 +33,10 @@ urlpatterns = [
     url(r'^api/jobs/contracts/applicant/(?P<pk>[0-9]+)/current$', job.applicant_current_contracts),
     url(r'^api/jobs/contracts/poster/(?P<pk>[0-9]+)/previous$', job.poster_previous_contracts),
     url(r'^api/jobs/contracts/applicant/(?P<pk>[0-9]+)/previous$', job.applicant_previous_contracts),
+    url(r'^api/jobs/payments$', payment.payment_list),
+    url(r'^api/jobs/payments/(?P<payment_number>[0-9]+)$', payment.payment_detail),
     url(r'^api/userprofiles/preferences$', views.preferences_list),
-    url(r'^api/rest-password$', views.rest_password)
+    url(r'^api/rest-password$', views.reset_password)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
