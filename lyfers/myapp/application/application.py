@@ -214,10 +214,10 @@ def application_chosen(request, application_number, format=None):
 
 def send_email(user):
     """
-        Send email that the recipient has been choosen for the job.
+        Send email that the recipient has been chosen for the job.
     """
-    title = "Lyfers: Congratulation You Have Been Choosen!"
-    message = "You have been choosen for the job! Please go to www.lyfersapp.com/confirm."
+    title = "Lyfers: Congratulation You Have Been Chosen!"
+    message = "You have been chosen for the job! Please go to www.lyfersapp.com/confirm."
     recipient = user.contactEmail
     sender = "lyfersapp@gmail.com"
     send_mail(title, message, sender, [recipient], fail_silently=False)
