@@ -191,11 +191,11 @@ def update_job(id):
     job.save()
 
 @api_view(['POST'])
-def application_choosen(request, application_number, format=None):
+def application_chosen(request, application_number, format=None):
     """
     Choose an Applicant.
 
-    Path: /api/jobs/applications/APPLICATION_NUMBER/choosen
+    Path: /api/jobs/applications/APPLICATION_NUMBER/chosen
     """
 
     if request.method == 'POST':
@@ -204,7 +204,7 @@ def application_choosen(request, application_number, format=None):
         except:
             error_response = "Application does not exist."
             return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)          
-        application.status = "Choosen"
+        application.status = "Chosen"
         application.save()
         user = UserProfile.objects.get(id=application.applicantID.id)
         # send_email(user)
