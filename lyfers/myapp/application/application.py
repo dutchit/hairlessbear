@@ -72,22 +72,22 @@ def application_list(request, format=None):
 
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # try:
-        #     print ("Request Data")
-        #     print (request.data)
-        #     serializer = ApplicationSerializer(application, data=request.data)
-        # except:
-        #     error_response = "ApplicationSerializer does not match."
-        #     return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            print ("Request Data")
+            print (request.data)
+            serializer = ApplicationSerializer(application, data=request.data)
+        except:
+            error_response = "ApplicationSerializer does not match."
+            return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
 
-        # if serializer.is_valid():
-        #     print ("Serializer data:", serializer.data)
-        #     print ("Serializer Valid.")
-        #     serializer.save()
-        #     return Response(request.data, status=status.HTTP_201_CREATED)
-        # else:
-        #     error_response = "Serializer is not valid."
-        #     return Response(status=status.HTTP_400_BAD_REQUEST)
+        if serializer.is_valid():
+            print ("Serializer data:", serializer.data)
+            print ("Serializer Valid.")
+            serializer.save()
+            return Response(request.data, status=status.HTTP_201_CREATED)
+        else:
+            error_response = "Serializer is not valid."
+            return Response(status=status.HTTP_400_BAD_REQUEST)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','PUT'])
