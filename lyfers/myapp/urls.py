@@ -1,5 +1,4 @@
 from django.conf.urls import url
-from django.conf import settings
 from rest_framework.urlpatterns import format_suffix_patterns
 from myapp import views
 from myapp.user import user
@@ -39,6 +38,6 @@ urlpatterns = [
     url(r'^api/jobs/payments/(?P<payment_number>[0-9]+)$', payment.payment_detail),
     url(r'^api/userprofiles/preferences$', views.preferences_list),
     url(r'^api/reset-password$', views.reset_password)
-] + static(settings.MEDIA_URL, document_root= settings.MEDIA_URL)
+]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
