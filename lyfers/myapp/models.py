@@ -28,6 +28,13 @@ class ProviderProfile(models.Model):
     def __str__(self):
         return  "(" + str(self.id) + ")" + " User ID: " + str(self.userID) + " , Title: " + str(self.profileTitle)
 
+class Image(models.Model):
+    userID = models.ForeignKey(ProviderProfile)
+    image = models.ImageField(upload_to='myapp/images/', blank=True, null=True)
+
+    def __str__(self):
+        return "(" + str(self.id) + ")" + " User ID: " + str(self.userID)
+
 class Jobs(models.Model):
     userID = models.ForeignKey(UserProfile)
     category = models.CharField(max_length=200, blank=True)

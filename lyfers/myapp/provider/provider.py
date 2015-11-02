@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from myapp.models import UserProfile, ProviderProfile
-from myapp.serializers import ProviderProfileSerializer
+from myapp.models import UserProfile, ProviderProfile, Image
+from myapp.serializers import ProviderProfileSerializer, ImageSerializer
 import json
 
 @api_view(['GET', 'POST'])
@@ -121,3 +121,46 @@ def user_providerprofile_detail(request, pk, providerprofile_number, format=None
 
     error_response = "Method: " + request.method + " is wrong."
     return Response(data= error_response, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def providerprofile_image_list(request, format=None):
+    """
+    List all Provider Profiles Images, or create a new Provider Profile Image.
+
+    POST PARAMETERS
+    data = {
+    "userID": Provider Profile ID, 
+    "image": "Image Path"
+    }
+    """
+    user = None
+    if request.method == 'GET':
+        images = Image.objects.all()
+        serializer = ImageSerializer(images, many=True)
+        return Response(serializer.data)
+    
+    error_response = "Method is not GET."
+    return Response(data=error_response, status=status.HTTP_400_BAD_REQUEST)
+    # elif request.method == 'POST':
+    #     print ("Data: " + str(request.data))
+
+    #     try:
+    #         userID = request.data["userID"]
+    #         user = UserProfile.objects.get(pk=userID)
+    #     except:
+    #         print ("Username is not in the system.")
+    #         content = "Username is not in the system."
+    #         Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    #     try:
+    #         serializer = ProviderProfileSerializer(data=request.data)
+    #     except:
+    #         print ("Data is wrong compared to Register Serializer.")
+    #         content = "Data is wrong compared to Provider Profile Serializer."
+    #         return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^api/userprofiles$', user.userprofile_list),
     url(r'^api/userprofiles/(?P<pk>[0-9]+)$', user.userprofile_detail),
     url(r'^api/providerprofiles$', provider.providerprofile_list),
+    url(r'^api/providerprofiles/images$', provider.providerprofile_image_list),
     url(r'^api/providerprofiles/(?P<pk>[0-9]+)$', provider.user_providerprofile_list),
     url(r'^api/providerprofiles/(?P<pk>[0-9]+)/(?P<providerprofile_number>[0-9]+)$', provider.user_providerprofile_detail),
     url(r'^api/jobs$', job.jobs_list),
@@ -36,7 +37,7 @@ urlpatterns = [
     url(r'^api/jobs/payments$', payment.payment_list),
     url(r'^api/jobs/payments/(?P<payment_number>[0-9]+)$', payment.payment_detail),
     url(r'^api/userprofiles/preferences$', views.preferences_list),
-    url(r'^api/rest-password$', views.reset_password)
+    url(r'^api/reset-password$', views.reset_password)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

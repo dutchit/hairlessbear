@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from myapp.models import UserProfile, ProviderProfile, Jobs, Contract, Preference, Application, Payment
+from myapp.models import UserProfile, ProviderProfile, Jobs, Contract, Preference, Application, Payment, Image
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,3 +43,8 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = ('id', 'contractID', 'employerID', 'employeeID', 'amount', 'date')
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ('id', 'userID', 'image')
