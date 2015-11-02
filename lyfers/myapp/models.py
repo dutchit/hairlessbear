@@ -30,7 +30,8 @@ class ProviderProfile(models.Model):
         return  "(" + str(self.id) + ")" + " User ID: " + str(self.userID) + " , Title: " + str(self.profileTitle)
 
 def image_path(instance, filename):
-    return os.path.join('myapp/images/users', str(instance.userID.id), filename)
+    filename = str(instance.userID.id) + "-" + filename
+    return os.path.join('myapp/images/users', filename)
 
 class Image(models.Model):
     userID = models.ForeignKey(ProviderProfile)
