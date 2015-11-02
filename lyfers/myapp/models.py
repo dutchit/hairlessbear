@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+import os
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -28,10 +29,13 @@ class ProviderProfile(models.Model):
     def __str__(self):
         return  "(" + str(self.id) + ")" + " User ID: " + str(self.userID) + " , Title: " + str(self.profileTitle)
 
+def image_path(instance, filename):
+    return os.path.join('myapp/images/users', str(instance.userID.id), filename)
+
 class Image(models.Model):
     userID = models.ForeignKey(ProviderProfile)
-    image = models.ImageField(upload_to='myapp/images/', blank=True, null=True)
-
+    # image = models.ImageField(upload_to='myapp/images/', blank=True, null=True)
+    image = models.ImageField(upload_to=image_path, blank=True, null=True)
     def __str__(self):
         return "(" + str(self.id) + ")" + " User ID: " + str(self.userID)
 
