@@ -66,7 +66,7 @@ class Application(models.Model):
     status = models.CharField(max_length=20, blank=True, default="Submitted")
 
     def __str__(self):
-        return "(App ID: " + str(self.id) + ")" + " Job ID: "+ str(self.jobID) + " " + str(self.jobID.title)+ ", Applicant ID: " + str(self.applicantID) + ", Provider Profile ID: " + str(self.providerprofileID)
+        return "(App ID: " + str(self.id) + ")" + " Job ID: "+ str(self.jobID.id) + ", Title: " + str(self.jobID.title)+ ", Applicant ID: " + str(self.applicantID.id) + ", Provider Profile ID: " + str(self.providerprofileID.id) + ", Application Poster ID: " + str(self.application_posterID.id)
 
 class Contract(models.Model):
     applicationID = models.ForeignKey(Application)
@@ -89,7 +89,7 @@ class Payment(models.Model):
     date = models.DateField(default=date.today, blank=True)
 
     def __str__(self):
-        return "(Payment ID: " + str(self.id) + ") " + "Contract ID: " + str(self.contractID) + ", Employer ID: " + str(self.employerID) + ", Employee ID: " + str(self.employeeID)
+        return "(Payment ID: " + str(self.id) + ") " + "Contract ID: " + str(self.contractID.id) + ", Employer ID: " + str(self.employerID.id) + ", Employee ID: " + str(self.employeeID.id)
 
 class Preference(models.Model):
     userID = models.ForeignKey(UserProfile)

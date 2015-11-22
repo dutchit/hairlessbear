@@ -29,11 +29,12 @@ def application_list(request, format=None):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        print ("Data: " + str(request.data))
+        # print ("Data: " + str(request.data))
 
         try:
             application_posterID = request.data["application_posterID"]
             user = UserProfile.objects.get(id=application_posterID)
+            print ("Applicant Poster ID:", application_posterID)
         except:
             print ("Poster ID is not in the system.")
             content = "Poster ID is not in the system."
@@ -42,6 +43,7 @@ def application_list(request, format=None):
         try:
             applicantID = request.data["applicantID"]
             user = UserProfile.objects.get(id=applicantID)
+            print ("Applicant Poster ID:", application_posterID)
         except:
             print ("Appicant ID is not in the system.")
             content = "Applicant ID is not in the system."
@@ -57,7 +59,7 @@ def application_list(request, format=None):
 
         try:
             application = Application.objects.get(applicantID=applicantID, jobID=request.data["jobID"])
-        except:      
+        except:
             print("Application does not exist.")  
             try:
                 serializer = ApplicationSerializer(data=request.data)

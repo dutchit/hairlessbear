@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from myapp.models import UserProfile, Jobs, Contract
+from myapp.models import UserProfile, Jobs, Contract, Application
 from myapp.serializers import JobsSerializer, ContractSerializer
 from datetime import date
 import json
@@ -24,7 +24,8 @@ def jobs_list(request, format=None):
         "timeUnit": "",
         "price": "",
         "lowerBound": 0,
-        "upperBound": 0
+        "upperBound": 0,
+        "status": "A status"
     }
     """
     if request.method == 'GET':
@@ -414,19 +415,19 @@ def applicant_previous_contracts(request, pk, format=None):
     error_response = "GET method needed."
     Response(data=error_response,status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET','PUT'])
+@api_view(['GET','PUT', 'DELETE'])
 def contract_detail(request, contract_number, format=None):
     """
     Add or Update a Contract.
 
-    Path: /api/contracts/CONTRACT_NUMBER
+    Path: /api/jobs/contracts/CONTRACT_NUMBER
 
     PUT PARAMETERS
     data = {
         "id": Contract ID,
         "applicationID": Application ID,
         "jobID": Job ID,
-        "status": "Incomplete or Completed",
+        "status": "Incomplete, Completed, or Terminated",
         "job_posterID": Job Poster ID,
         "job_poster_rating": Job Poster Rating,
         'job_applicantID': Job Applicant ID,
@@ -458,6 +459,19 @@ def contract_detail(request, contract_number, format=None):
             update_rating(request, contract)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        contract = Contract.objects.get(id=contract_number)
+        contract.status = "Terminated"
+        contract.save()
+        job = Jobs.objects.get(id=contract.jobID.id)
+        job.status = "Active"
+        job.save()
+        application = Application.objects.get(id=contract.applicationID.id)
+        application.status = "Terminated"
+        application.save()
+        message_response = "Contract: " + str(contract.id) + " has been terminated."
+        return Response(data=message_response, status=status.HTTP_200_OK)
 
     error_response = "Method: " + request.method + " is wrong."
     return Response(data= error_response, status=status.HTTP_400_BAD_REQUEST)
