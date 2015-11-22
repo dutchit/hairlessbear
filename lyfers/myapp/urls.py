@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^api/jobs/applications/(?P<application_number>[0-9]+)$', application.application_detail),
     url(r'^api/jobs/applications/(?P<application_number>[0-9]+)/accepted$', application.application_accepted),
     url(r'^api/jobs/applications/(?P<application_number>[0-9]+)/chosen$', application.application_chosen),
+    url(r'^api/jobs/applications/(?P<application_number>[0-9]+)/declined$', application.application_declined),
     url(r'^api/jobs/(?P<job_number>[0-9]+)/applicants$', application.job_applicant_list),
     url(r'^api/jobs/(?P<pk>[0-9]+)$', job.user_jobs_list),
     url(r'^api/jobs/(?P<pk>[0-9]+)/current$', job.user_current_jobs_list),
