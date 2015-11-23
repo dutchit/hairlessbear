@@ -59,6 +59,7 @@ def payment_list(request, format=None):
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
         if serializer.is_valid():
+            contract.status = "Paid"
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 

@@ -307,11 +307,11 @@ def contract_list(request, format=None):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def poster_currrent_contracts(request, pk, format=None):
+def poster_contracts(request, pk, format=None):
     """
     Retrieve Job Poster's Current Contracts.
 
-    Path: /api/jobs/contracts/poster/USER_ID_NUMBER/current
+    Path: /api/jobs/contracts/poster/USER_ID_NUMBER
     """
     today = date.today()
 
@@ -323,7 +323,7 @@ def poster_currrent_contracts(request, pk, format=None):
 
 
     if request.method == 'GET':
-        user_jobs = Contract.objects.filter(job_posterID=pk, date__gte=today).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
+        user_jobs = Contract.objects.filter(job_posterID=pk).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
         for current_contract in user_jobs:
             job = Jobs.objects.filter(id=current_contract['jobID']).values('title')
             print ("Poster Current Contracts")
@@ -335,11 +335,11 @@ def poster_currrent_contracts(request, pk, format=None):
     Response(data=error_response,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def applicant_current_contracts(request, pk, format=None):
+def applicant_contracts(request, pk, format=None):
     """
     Retrieve Job Applicant's Current Contracts.
     
-    Path: /api/jobs/contracts/applicant/USER_ID_NUMBER/current
+    Path: /api/jobs/contracts/applicant/USER_ID_NUMBER
     """
     today = date.today()
 
@@ -351,7 +351,7 @@ def applicant_current_contracts(request, pk, format=None):
 
 
     if request.method == 'GET':
-        user_jobs = Contract.objects.filter(job_applicantID=pk, date__gte=today).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
+        user_jobs = Contract.objects.filter(job_applicantID=pk).values('id', 'applicationID','jobID','status', 'job_posterID', 'job_poster_rating', 'job_applicantID', 'job_applicant_rating', 'date')
         for current_contract in user_jobs:
             job = Jobs.objects.filter(id=current_contract['jobID']).values('title')
             print ("Applicant Current Contracts")
